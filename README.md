@@ -1,187 +1,324 @@
-# LinguaLeap - Language Learning Platform
+<div align="center">
 
-A modern, spaced repetition-based language learning platform built with React, TypeScript, and Supabase.
+# 🌟 LinguaLeap
 
-## Overview
+[![GitHub stars](https://img.shields.io/github/stars/yourusername/lingualeap?style=social)](https://github.com/yourusername/lingualeap/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/yourusername/lingualeap?style=social)](https://github.com/yourusername/lingualeap/network)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)](https://reactjs.org/)
 
-LinguaLeap is a comprehensive language learning application that helps users master vocabulary through intelligent spaced repetition and adaptive learning algorithms. The platform tracks user progress, adapts to learning patterns, and provides personalized review schedules.
+*🚀 Une plateforme d'apprentissage des langues moderne avec système de répétition espacée intelligente*
 
-## Features
+Transformez votre façon d'apprendre le vocabulaire avec notre algorithme SRS sophistiqué qui s'adapte à votre rythme d'apprentissage.
 
-- **Smart Learning System**
-  - Spaced Repetition System (SRS) for optimal review scheduling
-  - Adaptive difficulty based on user performance
-  - Five mastery levels: Unknown, Learning, Known, Mastered, Long-term
+[▶️ Démo en ligne](https://lingualeap-demo.vercel.app) • [📖 Documentation](#documentation) • [🐛 Signaler un bug](https://github.com/yourusername/lingualeap/issues)
 
-- **Progress Tracking**
-  - Detailed statistics and learning insights
-  - Visual progress indicators
-  - Streak tracking for consistent practice
-  - Mastery level progression
+</div>
 
-- **Vocabulary Management**
-  - Organized lessons by topic
-  - Example sentences for context
-  - Interactive flashcard interface
-  - Group practice by mastery level
+---
 
-- **User Experience**
-  - Intuitive swipe interface for reviews
-  - Real-time progress updates
-  - Responsive design
-  - Error handling and retry mechanisms
+## ✨ Fonctionnalités principales
 
-## Installation
+### 🧠 **Système d'Apprentissage Intelligent**
+- **Algorithme SRS Avancé** : Planification des révisions optimisée avec espacement intelligent
+- **5 Niveaux de Maîtrise** : De Inconnu à Maîtrise à long terme
+- **Adaptation Personnalisée** : L'algorithme s'adapte à votre performance et votre rythme
 
-1. Clone the repository:
+### 📊 **Suivi de Progrès Complet**
+- **Statistiques Détaillées** : Visualisez votre progression avec des graphiques intuitifs
+- **Indicateurs Visuels** : Codes couleur et icônes pour chaque niveau de maîtrise
+- **Streak Tracking** : Suivez vos séries d'apprentissage pour rester motivé
+- **Mises à jour en Temps Réel** : Votre progression est sauvegardée instantanément
+
+### 🎯 **Interface Interactive**
+- **Cartes Swipeables** : Interface tactile moderne pour mobile et desktop
+- **Feedback Visuel** : Animations fluides et retours immédiats
+- **Design Responsive** : Expérience optimale sur tous les appareils
+- **Pratique par Groupes** : Révisez les cartes regroupées par niveau de maîtrise
+
+### 🛠️ **Panneau d'Administration**
+- **Gestion de Contenu** : Ajoutez et modifiez facilement les leçons et cartes
+- **Paramètres d'Apprentissage** : Personnalisez les exigences de maîtrise
+- **Monitoring** : Suivez les patterns d'apprentissage et la performance
+
+---
+
+## 🚀 Démarrage Rapide
+
+### Prérequis
+- Node.js 18+
+- Un compte Supabase
+
+### Installation
+
 ```bash
-git clone <repository-url>
+# Clonez le projet
+git clone https://github.com/yourusername/lingualeap.git
 cd lingualeap
-```
 
-2. Install dependencies:
-```bash
+# Installez les dépendances
 npm install
+
+# Configurez les variables d'environnement
+cp .env.example .env.local
 ```
 
-3. Set up environment variables:
+### Configuration Supabase
+
+1. Créez un nouveau projet sur [Supabase](https://supabase.com)
+2. Exécutez les migrations SQL depuis `supabase/migrations/`
+3. Ajoutez vos clés dans `.env.local` :
+
+```env
+VITE_SUPABASE_URL=votre_url_supabase
+VITE_SUPABASE_ANON_KEY=votre_cle_anon_supabase
+```
+
+### Lancement
+
 ```bash
-cp .env.example .env
-```
-
-Update `.env` with your Supabase credentials:
-```
-VITE_SUPABASE_URL=your_supabase_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
-
-4. Start the development server:
-```bash
+# Démarrez le serveur de développement
 npm run dev
 ```
 
-## Core Algorithms
+Ouvrez [http://localhost:5173](http://localhost:5173) dans votre navigateur.
 
-### Spaced Repetition System (SRS)
+---
 
-The application uses a sophisticated SRS algorithm that determines review intervals based on:
-- Current mastery level
-- Consecutive correct answers
-- Response time
-- Total review count
+## 🧮 Algorithme d'Apprentissage
 
-Mastery Levels:
-1. Unknown (New words)
-   - Review interval: 1 hour
-   - Base score: 0
+### Système de Répétition Espacée (SRS)
 
-2. Learning
-   - Review interval: 4 hours
-   - Requires: 1+ correct answers
-   - Base score: 1
-
-3. Known
-   - Review interval: 1 day
-   - Requires: 2+ correct answers
-   - Base score: 2
-
-4. Mastered
-   - Review interval: 3 days
-   - Requires: 3+ correct answers
-   - Base score: 3
-
-5. Long-term
-   - Review interval: 7 days
-   - Requires: 5+ correct answers, fast response time
-   - Base score: 4
-
-### Score Calculation
+Notre algorithme calcule intelligemment les intervalles de révision :
 
 ```typescript
-Score = BaseScore + StreakBonus + TimeBonus
-
-where:
-- BaseScore = Current mastery level (0-5)
-- StreakBonus = min(correct_streak / 5, 1)
-- TimeBonus = max(0, min(1, (5000 - response_time) / 5000))
+Score = ScoreBase + BonusStreak + BonusTemps
 ```
 
-## Project Structure
+#### Niveaux de Maîtrise
+
+| Niveau | Nom | Intervalle | Score Base | Conditions |
+|--------|-----|------------|------------|------------|
+| 0 | 🆕 Inconnu | 1 heure | 0 | Nouveau mot |
+| 1 | 📚 Apprentissage | 4 heures | 1 | 1+ réponses correctes |
+| 2 | ✅ Connu | 1 jour | 2 | 2+ réponses correctes |
+| 3 | 🏆 Maîtrisé | 3 jours | 3 | 3+ réponses correctes |
+| 4 | 💎 Long terme | 7 jours | 4 | 5+ réponses, temps rapide |
+
+#### Calcul de Performance
+
+- **Bonus Streak** : Récompense les séries de réponses correctes
+- **Bonus Temps** : Favorise les réponses rapides et confiantes
+- **Adaptation** : L'algorithme s'ajuste selon votre progression
+
+---
+
+## 🏗️ Architecture & Stack Technique
+
+<div align="center">
+
+### 🎨 **Frontend**
+[![React](https://img.shields.io/badge/React-20232A?logo=react&logoColor=61DAFB)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+
+### 🗄️ **Backend**
+[![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?logo=supabase&logoColor=white)](https://supabase.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+
+### ⚡ **State Management**
+[![Zustand](https://img.shields.io/badge/Zustand-000000?logo=react&logoColor=white)](https://github.com/pmndrs/zustand)
+[![React Query](https://img.shields.io/badge/React_Query-FF4154?logo=react-query&logoColor=white)](https://tanstack.com/query)
+
+</div>
+
+### Structure du Projet
 
 ```
 src/
-├── components/          # Reusable UI components
-├── context/            # React context providers
-├── hooks/              # Custom React hooks
-├── lib/               # Utility functions and configurations
-├── pages/             # Route components
-├── services/          # Business logic and API calls
-├── store/             # State management
-├── styles/            # Global styles and animations
-└── types/             # TypeScript type definitions
-
-supabase/
-├── migrations/        # Database migrations
-└── schema.sql        # Database schema
+├── 📂 components/         # Composants UI réutilisables
+│   ├── 🎨 ui/            # Composants de base
+│   ├── 👨‍💼 admin/        # Interface d'administration
+│   └── 📱 *.tsx          # Composants fonctionnels
+├── 📂 context/           # Context providers (Auth)
+├── 📂 hooks/             # Hooks personnalisés React
+├── 📂 lib/               # Utilitaires et client Supabase
+├── 📂 pages/             # Composants de routing
+├── 📂 services/          # Logique métier et API
+│   ├── 🧠 learningAlgorithm.ts    # Algorithme SRS
+│   ├── 🎯 smartPracticeService.ts # Pratique intelligente
+│   └── 📊 progressService.ts      # Suivi de progression
+├── 📂 store/             # Stores Zustand
+├── 📂 styles/            # Styles globaux
+└── 📂 types/             # Définitions TypeScript
 ```
 
-## Known Issues
+---
 
-1. Progress View Updates
-   - Progress statistics sometimes require manual refresh
-   - Inconsistent score display between views
+## 🎯 Utilisation
 
-2. Smart Practice
-   - Review scheduling needs optimization
-   - Response time calculation improvements needed
+### Apprendre avec les Flashcards
 
-3. Error Handling
-   - Better error messages for network issues
-   - Retry mechanism refinement
+1. **Navigation** : Accédez à la section "Pratique" depuis le menu principal
+2. **Swipe Interface** :
+   - ➡️ Swipe droit pour "Je connais"
+   - ⬅️ Swipe gauche pour "Je ne connais pas"
+3. **Feedback Immédiat** : Voyez votre score et niveau de maîtrise évoluer
+4. **Progression** : Les cartes sont automatiquement programmées pour révision
 
-## TODO
+### Suivre sa Progression
 
-1. Features
-   - [ ] Multiple language support
-   - [ ] Audio pronunciation
-   - [ ] Writing practice
-   - [ ] Export progress data
-   - [ ] Social features (leaderboards, sharing)
+- **Tableau de bord** : Vue d'ensemble de votre progression
+- **Statistiques** : Mots appris, pourcentage de maîtrise, séries actives
+- **Graphiques** : Visualisation de votre évolution temporelle
+- **Filtres** : Affichez les cartes par niveau de maîtrise
 
-2. Technical
-   - [ ] Offline support
-   - [ ] Performance optimizations
-   - [ ] Mobile app version
-   - [ ] Test coverage
-   - [ ] CI/CD pipeline
+### Gestion du Contenu (Admin)
 
-## Troubleshooting
+- **Leçons** : Créez et organisez vos leçons par thème
+- **Cartes** : Ajoutez du vocabulaire avec exemples et contextes
+- **Paramètres** : Ajustez les seuils de maîtrise et intervalles SRS
 
-Common issues and solutions:
+---
 
-1. Progress Not Updating
-   - Clear browser cache
-   - Check network connectivity
-   - Verify Supabase connection
+## 🔧 Scripts Disponibles
 
-2. Review Scheduling Issues
-   - Check timezone settings
-   - Verify date calculations
-   - Monitor review intervals
+```bash
+# Développement
+npm run dev          # Serveur de développement
+npm run build        # Build de production
+npm run preview      # Aperçu du build
 
-3. Performance Issues
-   - Reduce unnecessary re-renders
-   - Optimize database queries
-   - Check browser console for errors
+# Code Quality
+npm run lint         # Linting avec ESLint
+npm run lint:fix     # Auto-correction du linting
+```
 
-## Contributing
+---
 
-1. Fork the repository
-2. Create a feature branch
-3. Commit changes
-4. Push to the branch
-5. Create a Pull Request
+## 🚀 Déploiement
 
-## License
+### Vercel (Recommandé)
 
-MIT License - see LICENSE file for details
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/lingualeap)
+
+1. Connectez-vous à votre compte Vercel
+2. Importez le projet GitHub
+3. Configurez les variables d'environnement
+4. Déployez ! 🎉
+
+### Docker
+
+```bash
+# Build l'image
+docker build -t lingualeap .
+
+# Lancez le conteneur
+docker run -p 5173:5173 lingualeap
+```
+
+---
+
+## 🤝 Contribuer
+
+Nous apprécions vos contributions ! Voici comment participer :
+
+### 📋 Pour commencer
+
+1. **Fork** le projet
+2. **Clonez** votre fork : `git clone https://github.com/votre-username/lingualeap.git`
+3. **Créez une branche** : `git checkout -b feature/nouvelle-fonctionnalite`
+
+### 🔨 Développement
+
+```bash
+# Installez les dépendances
+npm install
+
+# Lancez le dev server
+npm run dev
+
+# Appliquez vos changements
+git commit -m "feat: ajoute nouvelle fonctionnalité"
+
+# Push vers votre fork
+git push origin feature/nouvelle-fonctionnalite
+```
+
+### 📝 Guidelines de Contribution
+
+- ✅ Suivez les conventions de code existantes
+- ✅ Ajoutez des tests pour les nouvelles fonctionnalités
+- ✅ Mettez à jour la documentation si nécessaire
+- ✅ Assurez-vous que tous les tests passent
+- ✅ Respectez le format [Conventional Commits](https://www.conventionalcommits.org/)
+
+### 🐛 Rapports de Bugs
+
+Quand vous signalez un bug, incluez :
+- Description détaillée du problème
+- Étapes pour reproduire
+- Screenshots si applicable
+- Version du navigateur/OS
+
+---
+
+## 📊 Roadmap
+
+### 🎯 Prochaine Version (v2.0)
+
+- [ ] 🌍 Support multilingue (i18n)
+- [ ] 🔊 Prononciation audio (TTS)
+- [ ] ✍️ Exercices d'écriture
+- [ ] 📱 Application mobile PWA
+- [ ] 🎮 Gamification (badges, achievements)
+
+### 🔮 Vision Long Terme
+
+- [ ] 🤖 Intelligence artificielle pour personnalisation avancée
+- [ ] 👥 Mode apprentissage social
+- [ ] 📚 Intégration avec des ressources externes
+- [ ] 🎨 Thèmes personnalisables
+- [ ] 📊 Analytics avancés
+
+---
+
+## 🆘 Support & FAQ
+
+### Questions Fréquentes
+
+**Q: Comment fonctionne l'algorithme SRS ?**
+R: L'algorithme analyse vos performances et adapte les intervalles de révision pour optimiser la mémorisation à long terme.
+
+**Q: Puis-je utiliser LinguaLeap hors ligne ?**
+R: Une version PWA avec support hors ligne est en développement (v2.0).
+
+**Q: Comment importer/exporter mon vocabulaire ?**
+R: Cette fonctionnalité sera disponible dans la prochaine version majeure.
+
+### Obtenir de l'Aide
+
+- 📖 [Documentation complète](https://lingualeap-docs.vercel.app)
+- 💬 [Discussions GitHub](https://github.com/yourusername/lingualeap/discussions)
+- 🐛 [Issues et bug reports](https://github.com/yourusername/lingualeap/issues)
+- 📧 [Contact support](mailto:support@lingualeap.app)
+
+---
+
+## 📜 Licence
+
+Ce projet est sous licence [MIT](LICENSE) - créez, modifiez et distributez librement !
+
+---
+
+<div align="center">
+
+**⭐ Si LinguaLeap vous aide dans votre apprentissage, n'hésitez pas à nous donner une étoile sur GitHub !**
+
+Made with ❤️ by [Votre Nom](https://github.com/yourusername)
+
+[🔝 Retour en haut](#-lingualeap)
+
+</div>
